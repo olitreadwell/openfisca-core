@@ -38,7 +38,7 @@
   - #917/#916 — stale.
 
 ## Gap ledger (dedupe — READ FIRST, never re-pick)
-- `2026-09-06` self-found gap: `assert_near` fails on `str` variables (bytes dtype `|S{n}` vs unicode target) — outcome: pr-opened — lesson: maintainer guillett's proposed fix (commit ba1ff4580) was incomplete (didn't handle bytes dtype); PR #1228 (closed-unmerged) was a larger refactor. Fix: route str/bytes/object value arrays to a string comparison in `assert_near`.
+- `2026-09-06` self-found gap: `assert_near` fails on `str` variables (bytes dtype `|S{n}` vs unicode target) — outcome: pr-opened (fork PR #1, https://github.com/olitreadwell/openfisca-core/pull/1, CI green: 27/27 check-runs success, mergeable_state clean) — lesson: maintainer guillett's proposed fix (commit ba1ff4580) was incomplete (didn't handle bytes dtype); PR #1228 (closed-unmerged) was a larger refactor. Fix: route str/bytes/object value arrays to a string comparison in `assert_near`.
 
 ## Mined gaps (discovered, not yet attempted)
 - `2026-09-06` tests-ci `assert_near` str handling: `assert_near` casts str/bytes value arrays to float, so a `str` variable (e.g. `postal_code`) with a non-numeric value fails with a bytes-vs-unicode mismatch; numeric-looking strings are silently compared as floats. Repro: YAML test with `postal_code: abcde` output fails. Expected: string values compared as strings. Proposed test: `test_str`, `test_str_list`, `test_str_bytes`, `test_str_object` in `tests/core/tools/test_assert_near.py`. Dedupe: issue #1316 open; PR #1228 closed-unmerged; no open upstream PR. — status: attempted (pr-opened)
