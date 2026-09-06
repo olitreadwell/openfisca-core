@@ -33,6 +33,12 @@ def assert_near(
     if numpy.issubdtype(value.dtype, numpy.datetime64):
         target_value = numpy.array(target_value, dtype=value.dtype)
         assert_datetime_equals(value, target_value, message)
+    if (
+        numpy.issubdtype(value.dtype, numpy.str_)
+        or numpy.issubdtype(value.dtype, numpy.bytes_)
+        or value.dtype == object
+    ):
+        return assert_str_equals(value, target_value, message)
     if isinstance(target_value, str):
         target_value = commons.eval_expression(target_value)
     if isinstance(target_value, str):
@@ -64,6 +70,16 @@ def assert_datetime_equals(value, target_value, message="") -> None:
 
 def assert_enum_equals(value, target_value, message="") -> None:
     value = value.decode_to_str()
+    assert (
+        value == target_value
+    ).all(), f"{message}{value} differs from {target_value}."
+
+
+def assert_str_equals(value, target_value, message="") -> None:
+    import numpy
+
+    value = numpy.asarray(value).astype(str)
+    target_value = numpy.asarray(target_value).astype(str)
     assert (
         value == target_value
     ).all(), f"{message}{value} differs from {target_value}."

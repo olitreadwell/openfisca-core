@@ -1,5 +1,12 @@
 # Changelog
 
+## 44.7.2
+
+#### Bug fixes
+
+- Fix `assert_near` failing on `str` variables (e.g. `postal_code`).
+  - `assert_near` now compares string values as strings instead of casting them to floats, so tests on `str` variables pass whether or not the value looks numeric.
+
 ## 44.7.1 [#1383](https://github.com/openfisca/openfisca-core/pull/1383)
 
 #### Bug fixes
