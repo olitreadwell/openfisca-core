@@ -2,8 +2,6 @@
 
 [![PyPi Downloads](https://img.shields.io/pypi/dm/openfisca-core?label=pypi%2Fdownloads&style=for-the-badge)](https://pepy.tech/project/openfisca-core)
 [![PyPi Version](https://img.shields.io/pypi/v/openfisca-core.svg?label=pypi%2Fversion&style=for-the-badge)](https://pypi.python.org/pypi/openfisca-core)
-[![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/openfisca-core?label=conda%2Fdownloads&style=for-the-badge)](https://anaconda.org/conda-forge/openfisca-core)
-[![Conda Version](https://img.shields.io/conda/vn/conda-forge/openfisca-core.svg?label=conda%2Fversion&style=for-the-badge)](https://anaconda.org/conda-forge/openfisca-core)
 
 [![Python](https://img.shields.io/pypi/pyversions/openfisca-core.svg?label=python&style=for-the-badge)](https://pypi.python.org/pypi/openfisca-core)
 [![Contributors](https://img.shields.io/github/contributors/openfisca/openfisca-core.svg?style=for-the-badge)](https://github.com/openfisca/openfisca-core/graphs/contributors)
@@ -18,7 +16,7 @@ This package contains the core features of OpenFisca, which are meant to be used
 
 ## Environment
 
-OpenFisca runs on Python. See [setup.py](setup.py) for supported versions.
+OpenFisca runs on Python. See [pyproject.toml](pyproject.toml) for supported versions.
 
 OpenFisca also relies strongly on NumPy. The last four minor versions should work, but only the latest/stable is tested.
 
@@ -26,11 +24,9 @@ OpenFisca also relies strongly on NumPy. The last four minor versions should wor
 
 If you're developing your own country package, you don't need to explicitly install OpenFisca-Core. It just needs to appear [in your package dependencies](https://github.com/openfisca/openfisca-france/blob/100.0.0/setup.py#L60).
 If you want to contribute to OpenFisca-Core itself, welcome!
-To install it locally you can use one of these two options:
-* [conda](https://docs.conda.io/en/latest/) package manager that we recommend for Windows operating system users,
-* or standard Python [pip](https://packaging.python.org/en/latest/key_projects/#pip) package manager.
+To install it locally we recommend to use [uv](https://docs.astral.sh/uv/getting-started/).
 
-### Installing `openfisca-core` with `pip`
+### Installing `openfisca-core` with `uv`
 
 This installation requires [Python](https://www.python.org/downloads/) and [GIT](https://git-scm.com) installations.
 
@@ -39,41 +35,10 @@ To install `openfisca-core` locally in development mode run the following comman
 ```bash
 git clone https://github.com/openfisca/openfisca-core.git
 cd openfisca-core
-python3 -m venv .venv
-source .venv/bin/activate
-make install-deps install-edit
+uv run make test
 ```
-
-### Installing `openfisca-core` with `conda`
-
-Since `openfisca-core` version [35.7.7](https://anaconda.org/conda-forge/openfisca-core), you could use `conda` to install OpenFisca-Core.
-
-Conda is the easiest way to use OpenFisca under Windows as by installing Anaconda you will get:
-- Python
-- The package manager [Anaconda.org](https://docs.anaconda.com/anacondaorg/user-guide/)
-- A virtual environment manager : [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)
-- A GUI [Anaconda Navigator](https://docs.anaconda.com/anaconda/navigator/index.html) if you choose to install the full [Anaconda](https://www.anaconda.com/products/individual)
-
-If you are familiar with the command line you could use [Miniconda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html), which needs very much less disk space than Anaconda.
-
-After installing conda, run these commands in an `Anaconda Powershell Prompt`:
-- `conda create --name openfisca python=3.11` to create an `openfisca` environment.
-- `conda activate openfisca` to use your new environment.
-
-Then, choose one of the following options according to your use case:
-- `conda install -c conda-forge openfisca-core` for default dependencies,
-- or `conda install -c conda-forge openfisca-core-api` if you want the Web API part,
-- or `conda install -c conda-forge -c openfisca openfisca-core-dev` if you want all the dependencies needed to contribute to the project.
-
-For information on how we publish to conda-forge, see [openfisca-core-feedstock](https://github.com/openfisca/openfisca-core-feedstock/blob/master/recipe/README.md).
 
 ## Testing
-
-Install the test dependencies:
-
-```
-make install-deps install-edit install-test
-```
 
 > For integration testing purposes, `openfisca-core` relies on
 > [country-template](https://github.com/openfisca/country-template.git) and
@@ -84,12 +49,12 @@ make install-deps install-edit install-test
 To run the entire test suite:
 
 ```sh
-make test
+uv run make test
 ```
 
 If you have many tests, you could run them in parallel :
 ```sh
-make test-core openfisca_args="--in-parallel"
+uv run make test-core openfisca_args="--in-parallel"
 ```
 
 You could add an option  `--num-workers=4` to limit to 4 threads. Default is your CPU Core number minus 1.
@@ -99,13 +64,13 @@ Be aware that this add overhead so use it only for huge test suite.
 To run all the tests defined on a test file:
 
 ```sh
-pytest tests/core/test_parameters.py
+uv run pytest tests/core/test_parameters.py
 ```
 
 To run a single test:
 
 ```sh
-pytest tests/core/test_parameters.py -k test_parameter_for_period
+uv run pytest tests/core/test_parameters.py -k test_parameter_for_period
 ```
 
 ## Types
@@ -117,7 +82,7 @@ As NumPy introduced the `typing` module in 1.20.0, to ensure type hints do not b
 Type checking is already run with `make test`. To run the type checker alone:
 
 ```sh
-make check-types
+uv run make check-types
 ```
 
 ## Style
@@ -127,13 +92,13 @@ This repository adheres to a [certain coding style](STYLEGUIDE.md), and we invit
 Style checking is already run with `make test`. To run the style checker alone:
 
 ```sh
-make check-style
+uv run make check-style
 ```
 
 To automatically style-format your code changes:
 
 ```sh
-make format-style
+uv run make format-style
 ```
 
 To automatically style-format your code changes each time you commit:
@@ -157,7 +122,7 @@ END
 
 OpenFisca’s toolchain checks whether documentation builds correctly and updates it automatically with each contribution to this repository.
 
-In the meantime, please take a look at our [contributing guidelines](CONTRIBUTING.md) for some general tips on how to document your contributions, and at our official documentation's [repository](https://github.com/openfisca/openfisca-doc/blob/master/README.md) to in case you want to know how to build it by yourself —and improve it!
+In the meantime, please take a look at our [contributing guidelines](CONTRIBUTING.md) for some general tips on how to document your contributions, and at our official documentation's [repository](https://github.com/openfisca/openfisca-doc/blob/main/README.md) to in case you want to know how to build it by yourself —and improve it!
 
 ## Serving the API
 
@@ -179,30 +144,3 @@ You can test that the API is running by executing the command:
 curl http://localhost:2000/parameters
 ```
 For more information about endpoints and input formatting, see the [official documentation](https://openfisca.org/doc/openfisca-web-api).
-
-### Tracker
-
-The OpenFisca Web API comes with an [optional tracker](https://github.com/openfisca/tracker) which allows you to measure the usage of the API.
-
-#### Tracker installation
-
-The tracker is not installed by default. To install it, run:
-
-```sh
-pip install openfisca_core[tracker] --use-deprecated=legacy-resolver # Or `pip install --editable ".[tracker]"` for an editable installation
-```
-
-
-#### Tracker configuration
-
-The tracker is activated when these two options are set:
-
-* `--tracker-url`: An URL ending with `piwik.php`. It defines the Piwik instance that will receive the tracking information. To use the main OpenFisca Piwik instance, use `https://stats.data.gouv.fr/piwik.php`.
-* `--tracker-idsite`: An integer. It defines the identifier of the tracked site on your Piwik instance. To use the main OpenFisca piwik instance, use `4`.
-* `--tracker-token`: A string. It defines the Piwik API Authentication token to differentiate API calls based on the user IP. Otherwise, all API calls will seem to come from your server. The Piwik API Authentication token can be found in your Piwik interface when you are logged in.
-
-For instance, to run the Web API with the mock country package `openfisca_country_template` and the tracker activated, run:
-
-```sh
-openfisca serve --country-package openfisca_country_template --port 5000 --tracker-url https://stats.data.gouv.fr/piwik.php --tracker-idsite 4 --tracker-token $TRACKER_TOKEN
-```

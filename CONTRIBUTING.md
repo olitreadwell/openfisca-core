@@ -5,7 +5,7 @@ TL;DR: [GitHub Flow](https://guides.github.com/introduction/flow/), [SemVer](htt
 
 ## Pull requests
 
-We follow the [GitHub Flow](https://guides.github.com/introduction/flow/): all code contributions are submitted via a pull request towards the `master` branch.
+We follow the [GitHub Flow](https://guides.github.com/introduction/flow/): all code contributions are submitted via a pull request towards the `main` branch.
 
 Opening a Pull Request means you want that code to be merged. If you want to only discuss it, send a link to your branch along with your questions through whichever communication channel you prefer.
 
@@ -74,7 +74,7 @@ We strive to deliver great error messages, which means they are:
 
 ## Documentation
 
-OpenFisca does not yet follow a common convention for docstrings, so you'll find [ReStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html), [Google](http://google.github.io/styleguide/pyguide.html#Comments), and [NumPy](https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt) style docstrings.
+OpenFisca does not yet follow a common convention for docstrings, so you'll find [ReStructuredText](https://www.sphinx-doc.org/en/master/usage/domains/python.html), [Google](http://google.github.io/styleguide/pyguide.html#Comments), and [NumPy](https://github.com/numpy/numpy/blob/main/doc/HOWTO_DOCUMENT.rst.txt) style docstrings.
 
 Whatever the style you choose, contributors and reusers alike will be more than thankful for the effort you put in documenting your contributions. Here are some general good practices you can follow:
 
@@ -85,10 +85,10 @@ Whatever the style you choose, contributors and reusers alike will be more than 
 ```py
 """Short summary of your module.
 
-A longer description of what are your module's motivation, domain, and use 
-cases. For example, if you decide to create a caching system for OpenFisca, 
-consisting on different caching mechanisms, you could say that large operations 
-are expensive for some users, that different caching mechanisms exist, and that 
+A longer description of what are your module's motivation, domain, and use
+cases. For example, if you decide to create a caching system for OpenFisca,
+consisting on different caching mechanisms, you could say that large operations
+are expensive for some users, that different caching mechanisms exist, and that
 this module implements some of them.
 
 You can then give examples on how to use your module:
@@ -120,7 +120,7 @@ __all__ = ["Cache", "Memory", "Disk"]
 class Cache:
     """Implements a new caching system.
 
-    Same as before, you could say this is good because virtuals systems are 
+    Same as before, you could say this is good because virtuals systems are
     great but the need a wrapper to make them work with OpenFisca.
 
     Document the class attributes —different from the initialisation arguments:
@@ -138,7 +138,6 @@ class Cache:
 
     def __init__(self, type: str) -> None:
         pass
-
 ```
 
 4. Finally, when adding methods to your class, or helper functions to your module, it is very important to document their contracts:
@@ -147,7 +146,7 @@ class Cache:
 def get(self, key: str) -> Any:
     """Again, summary description.
 
-    The long description is optional, as long as the code is easy to 
+    The long description is optional, as long as the code is easy to
     understand. However, there are four key elements to help others understand
     what the code does:
 
@@ -198,5 +197,4 @@ def get(self, key: str) -> Any:
     """
 
     pass
-
 ```

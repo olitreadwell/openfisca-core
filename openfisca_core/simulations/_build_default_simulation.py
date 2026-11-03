@@ -1,7 +1,6 @@
 """This module contains the _BuildDefaultSimulation class."""
 
-from typing import Union
-from typing_extensions import Self
+from typing import Self
 
 import numpy
 
@@ -47,7 +46,7 @@ class _BuildDefaultSimulation:
     count: int
 
     #: The built populations.
-    populations: dict[str, Union[Population[Entity]]]
+    populations: dict[str, Population[Entity]]
 
     #: The built simulation.
     simulation: Simulation

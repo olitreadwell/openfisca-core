@@ -7,6 +7,80 @@
 - Fix `assert_near` failing on `str` variables (e.g. `postal_code`).
   - `assert_near` now compares string values as strings instead of casting them to floats, so tests on `str` variables pass whether or not the value looks numeric.
 
+### 46.0.2 [#1408](https://github.com/openfisca/openfisca-core/pull/1408)
+
+#### Technical changes
+
+- Bump Certifi for RHSB-2026-012 Certificate compromise - eMudhra
+- Move CI version check in its own job to distinguish test failures from missing version update
+- Remove uv.lock from functional changes detection
+- Update uv.lock revision from 3 to 5
+
+### 46.0.1 [#1407](https://github.com/openfisca/openfisca-core/pull/1407)
+
+#### Technical changes
+
+- In continuous deployment, ensure git tag creation independently from documentation updates
+- Update dependencies with `uv sync --upgrade`
+- Change upper constraints for `gunicorn`, `openapi-spec-validator` and `psutil`
+
+# 46.0.0 [#1396](https://github.com/openfisca/openfisca-core/pull/1396)
+
+#### Breaking changes
+
+- Remove Python 3.10 support
+- Remove extras
+  - `dev` is moved to `[dependency-groups]/dev` in `pyproject.toml`
+  - `tracker` as it is not maintained nor used
+
+#### Technical changes
+
+- Move from `pip` to `uv` for package management
+- Rely on `uv` `--resolution=[highest, lowest-direct]` in CI to ensure a large test coverage on multiple `numpy` versions
+- Remove `setup.py` and `setup.cfg` and move logic to `pyproject.toml`
+- Reduce Makefile tasks, CI and CD complexity
+  - Lint is only run with a single version of Python
+- Allow `pytest` 9 (`pytest >=8.3.3, <10.0`)
+
+### 45.0.5 [#1387](https://github.com/openfisca/openfisca-core/pull/1387)
+
+#### Bug fixes
+
+- Fix `restore_simulation` rebuilding entity counts from the members mapping instead of the dumped ids.
+  - A group entity with no member was silently dropped from the restored simulation's `count` (while still listed in `ids`), so subsequent calculations returned arrays with missing entities — or failed with a `ValueError` when a value had been stored for the group entity.
+  - Restoring a simulation whose tax and benefit system has no group entity raised an `UnboundLocalError`.
+  - Each entity's `count` is now restored from its dumped `ids`.
+
+### 45.0.4 [#1397](https://github.com/openfisca/openfisca-core/pull/1397)
+
+#### Technical changes
+
+- Replace black, isort, flake8 by ruff
+
+### 45.0.3 [#1395](https://github.com/openfisca/openfisca-core/pull/1395)
+
+#### Technical changes
+
+- Migrate from a master branch to a main branch
+
+### 45.0.2 [#1394](https://github.com/openfisca/openfisca-core/pull/1394)
+
+#### Technical changes
+
+- Fix git tag push and in cascade missing Windows test on published version
+
+### 45.0.1 [#1393](https://github.com/openfisca/openfisca-core/pull/1393)
+
+#### Technical changes
+
+- Remove Conda support
+
+# 45.0.0 [#1393](https://github.com/openfisca/openfisca-core/pull/1393)
+
+#### Breaking changes
+
+- Move `ReformExcel*` from OpenFisca-Core to `ExcelReform*` in a dedicated package [openfisca-excel-reform](https://pypi.org/project/openfisca-excel-reform/) 
+
 ## 44.7.1 [#1383](https://github.com/openfisca/openfisca-core/pull/1383)
 
 #### Bug fixes
@@ -22,7 +96,7 @@
 
 - Manage list parameter in Excel reform
 
-## 44.6.0
+## 44.6.0 [#1374](https://github.com/openfisca/openfisca-core/pull/1374)
 
 #### Technical changes
 
@@ -30,7 +104,7 @@
 - Mark versions `44.3.0`, `44.4.0`, `44.4.1`, and `44.5.0` as yanked.
 - Bump version to `44.6.0` to restore continuous deployment from this reverted baseline.
 
-## 44.2.2
+## 44.2.2 [#1361](https://github.com/openfisca/openfisca-core/pull/1361)
 
 #### Bug fixes
 
@@ -42,7 +116,7 @@
 
 - Add a check for creating a simulation when building a test
 
-## 44.2.0
+## 44.2.0 [#1358](https://github.com/openfisca/openfisca-core/pull/1358)
 
 #### New features
 
@@ -341,9 +415,11 @@ population simulations, it has been marked as a major release.
 ```python
 from openfisca_core import indexed_enums as enum
 
+
 class TestEnum(enum.Enum):
-     ONE = "one"
-     TWO = "two"
+    ONE = "one"
+    TWO = "two"
+
 
 TestEnum.encode([2])
 #  EnumArray([0])
@@ -354,14 +430,16 @@ TestEnum.encode([2])
 ```python
 from openfisca_core import indexed_enums as enum
 
+
 class TestEnum(enum.Enum):
-     ONE = "one"
-     TWO = "two"
+    ONE = "one"
+    TWO = "two"
+
 
 TestEnum.encode([2])
 #  EnumArray([])
 
-TestEnum.encode([0,1,2,5])
+TestEnum.encode([0, 1, 2, 5])
 # EnumArray([<TestEnum.ONE: 'one'> <TestEnum.TWO: 'two'>])
 ```
 
@@ -1721,7 +1799,9 @@ For additional details, see the PR's [description](https://github.com/openfisca/
 **Before**
 
 ```Python
-simulation = SimulationBuilder().build_from_entities(tax_benefit_system, input_data, trace = True)
+simulation = SimulationBuilder().build_from_entities(
+    tax_benefit_system, input_data, trace=True
+)
 ```
 
 **After**
@@ -2054,7 +2134,7 @@ Before:
 
 ```py
 simulation = ...
-holder = simulation.persons.get_holder('salary')
+holder = simulation.persons.get_holder("salary")
 holder.get_known_periods()
 ```
 
@@ -2062,7 +2142,7 @@ After:
 
 ```py
 simulation = ...
-simulation.get_known_periods('salary')
+simulation.get_known_periods("salary")
 ```
 
 ## 24.10.0 [#784](https://github.com/openfisca/openfisca-core/pull/784)
@@ -2073,15 +2153,15 @@ Before:
 
 ```py
 simulation = ...
-holder = simulation.persons.get_holder('salary')
-holder.delete_arrays('2018-08')
+holder = simulation.persons.get_holder("salary")
+holder.delete_arrays("2018-08")
 ```
 
 After:
 
 ```py
 simulation = ...
-simulation.delete_arrays('salary', '2018-08')
+simulation.delete_arrays("salary", "2018-08")
 ```
 
 ### 24.9.9 [#786](https://github.com/openfisca/openfisca-core/pull/786)
@@ -2253,15 +2333,15 @@ Before:
 
 ```py
 simulation = ...
-holder = simulation.persons.get_holder('salary')
-holder.set_input('2018-08', [4000])
+holder = simulation.persons.get_holder("salary")
+holder.set_input("2018-08", [4000])
 ```
 
 After:
 
 ```py
 simulation = ...
-simulation.set_input('salary', '2018-08', [4000])
+simulation.set_input("salary", "2018-08", [4000])
 ```
 
 ## 24.4.0 [#717](https://github.com/openfisca/openfisca-core/pull/717)
@@ -2323,14 +2403,16 @@ Dump:
 
 ```py
 from openfisca_core.tools.simulation_dumper import dump_simulation
-dump_simulation(simulation, '/path/to/directory')
+
+dump_simulation(simulation, "/path/to/directory")
 ```
 
 Restore:
 
 ```py
 from openfisca_core.tools.simulation_dumper import restore_simulation
-simulation = restore_simulation('/path/to/directory', tax_benefit_system)
+
+simulation = restore_simulation("/path/to/directory", tax_benefit_system)
 ```
 
 ### 24.1.0 [#713](https://github.com/openfisca/openfisca-core/pull/713)
@@ -2932,21 +3014,17 @@ _Note: the 21.0.1 and 21.0.0 versions have been unpublished due to performance i
 Before:
 
 ```py
-HOUSING_OCCUPANCY_STATUS = Enum([
-    u'Tenant',
-    u'Owner',
-    u'Free lodger',
-    u'Homeless'])
+HOUSING_OCCUPANCY_STATUS = Enum(["Tenant", "Owner", "Free lodger", "Homeless"])
 ```
 
 Now:
 
 ```py
 class HousingOccupancyStatus(Enum):
-    tenant = u'Tenant'
-    owner = u'Owner'
-    free_lodger = u'Free lodger'
-    homeless = u'Homeless'
+    tenant = "Tenant"
+    owner = "Owner"
+    free_lodger = "Free lodger"
+    homeless = "Homeless"
 ```
 
 > Each Enum item has:
@@ -2957,11 +3035,11 @@ class HousingOccupancyStatus(Enum):
 
 ```py
 class housing_occupancy_status(Variable):
-    possible_values = HousingOccupancyStatus,
+    possible_values = (HousingOccupancyStatus,)
     default_value = HousingOccupancyStatus.tenant
     entity = Household
     definition_period = MONTH
-    label = u"Legal housing situation of the household concerning their main residence"
+    label = "Legal housing situation of the household concerning their main residence"
 ```
 
 
@@ -3006,11 +3084,11 @@ class housing_occupancy_status(Variable):
 
 > Example:
 ```py
-holder = simulation.household.get_holder('housing_occupancy_status')
+holder = simulation.household.get_holder("housing_occupancy_status")
 # Three possibilities
 holder.set_input(period, numpy.asarray([HousingOccupancyStatus.owner]))
-holder.set_input(period, numpy.asarray(['owner']))
-holder.set_input(period, numpy.asarray([0])) # Highly not recommended
+holder.set_input(period, numpy.asarray(["owner"]))
+holder.set_input(period, numpy.asarray([0]))  # Highly not recommended
 ```
 
 - When calculating an Enum variable, the output will be an [EnumArray](https://openfisca.org/doc/openfisca-python-api/enum_array.html#module-openfisca_core.indexed_enums).
@@ -3056,7 +3134,7 @@ Before:
 
 ```py
 class is_citizen(Variable):
-    column = BoolCol(default = True)
+    column = BoolCol(default=True)
     entity = Person
     definition_period = MONTH
     label = "Whether the person is a citizen"
@@ -3079,9 +3157,9 @@ Before:
 
 ```py
 class zipcode(Variable):
-    column = FixedStrCol(max_length = 5)
+    column = FixedStrCol(max_length=5)
     entity = Menage
-    label = u"Code INSEE (depcom) du lieu de résidence"
+    label = "Code INSEE (depcom) du lieu de résidence"
     definition_period = MONTH
 ```
 
@@ -3092,7 +3170,7 @@ class zipcode(Variable):
     value_type = str
     max_length = 5
     entity = Menage
-    label = u"Code INSEE (depcom) du lieu de résidence"
+    label = "Code INSEE (depcom) du lieu de résidence"
     definition_period = MONTH
 ```
 
@@ -3102,16 +3180,10 @@ Before:
 
 ```py
 class housing_occupancy_status(Variable):
-    column = EnumCol(
-        enum = Enum([
-            u'Tenant',
-            u'Owner',
-            u'Free lodger',
-            u'Homeless'])
-        )
+    column = EnumCol(enum=Enum(["Tenant", "Owner", "Free lodger", "Homeless"]))
     entity = Household
     definition_period = MONTH
-    label = u"Legal housing situation of the household concerning their main residence"
+    label = "Legal housing situation of the household concerning their main residence"
 ```
 
 After:
@@ -3119,15 +3191,10 @@ After:
 ```py
 class housing_occupancy_status(Variable):
     value_type = Enum
-    possible_values = Enum([
-        u'Tenant',
-        u'Owner',
-        u'Free lodger',
-        u'Homeless'
-        ])
+    possible_values = Enum(["Tenant", "Owner", "Free lodger", "Homeless"])
     entity = Household
     definition_period = MONTH
-    label = u"Legal housing situation of the household concerning their main residence"
+    label = "Legal housing situation of the household concerning their main residence"
 ```
 
 - Remove `PeriodSizeIndependentIntCol`:
@@ -3380,15 +3447,15 @@ For more information, check the [documentation](https://openfisca.org/doc/coding
   - Before:
     ```python
     new_legislation_parameters = update_legislation(
-        legislation_json = original_legislation_parameters,
-        path = ('children', 'impot_revenu', 'children', 'bareme', 'brackets', 1, 'threshold'),
-        period = reform_period,
-        value = 6011,
-        )
+        legislation_json=original_legislation_parameters,
+        path=("children", "impot_revenu", "children", "bareme", "brackets", 1, "threshold"),
+        period=reform_period,
+        value=6011,
+    )
     ```
   - Now:
     ```python
-    parameters.impot_revenu.bareme[1].threshold.update(period = reform_period, value = 6011)
+    parameters.impot_revenu.bareme[1].threshold.update(period=reform_period, value=6011)
     ```
 
 * Change the syntax to dynamically create new parameters
@@ -3404,45 +3471,54 @@ For more information, check the [documentation](https://openfisca.org/doc/coding
                 "format": "integer",
                 "unit": "currency",
                 "values": [
-                    {'start': u'2016-01-01', },
-                    {'start': u'2015-01-01', 'value': round(1135 * (1 + inflation))},
-                    ],
-                },
+                    {
+                        "start": "2016-01-01",
+                    },
+                    {"start": "2015-01-01", "value": round(1135 * (1 + inflation))},
+                ],
+            },
             "decote_seuil_couple": {
                 "@type": "Parameter",
                 "description": "Seuil de la décôte pour un couple",
                 "format": "integer",
                 "unit": "currency",
                 "values": [
-                    {'start': u'2065-01-01', },
-                    {'start': u'2015-01-01', 'value': round(1870 * (1 + inflation))},
-                    ],
-                },
+                    {
+                        "start": "2065-01-01",
+                    },
+                    {"start": "2015-01-01", "value": round(1870 * (1 + inflation))},
+                ],
             },
-        }
-    reference_legislation_copy['children']['plf2016_conterfactual'] = reform_legislation_subtree
+        },
+    }
+    reference_legislation_copy["children"]["plf2016_conterfactual"] = (
+        reform_legislation_subtree
+    )
     ```
 
   - Now:
     ```python
     from openfisca_core.parameters import ParameterNode
 
-    inflation = .001
-    reform_parameters_subtree = ParameterNode('plf2016_conterfactual', data = {
-        'decote_seuil_celib': {
-          'values': {
-            "2015-01-01": {'value': round(1135 * (1 + inflation))},
-            "2016-01-01": {'value': None}
-            }
-          },
-        'decote_seuil_couple': {
-          'values': {
-            "2015-01-01": {'value': round(1870 * (1 + inflation))},
-            "2065-01-01": {'value': None}
-            }
-          },
-        })
-    reference_parameters.add_child('plf2016_conterfactual', reform_parameters_subtree)
+    inflation = 0.001
+    reform_parameters_subtree = ParameterNode(
+        "plf2016_conterfactual",
+        data={
+            "decote_seuil_celib": {
+                "values": {
+                    "2015-01-01": {"value": round(1135 * (1 + inflation))},
+                    "2016-01-01": {"value": None},
+                }
+            },
+            "decote_seuil_couple": {
+                "values": {
+                    "2015-01-01": {"value": round(1870 * (1 + inflation))},
+                    "2065-01-01": {"value": None},
+                }
+            },
+        },
+    )
+    reference_parameters.add_child("plf2016_conterfactual", reform_parameters_subtree)
     ```
 
   - Note that this way of creating parameters is only recommended when using dynamically computed values (for instance `round(1135 * (1 + inflation))` in the previous example). If the values are static, the new parameters can be directly built from YAML (See New features section).
@@ -3483,11 +3559,13 @@ For more information, check the [documentation](https://openfisca.org/doc/coding
 
     dir_path = os.path.dirname(__file__)
 
+
     def reform_modify_parameters(parameters):
-        file_path = os.path.join(dir_path, 'plf2016.yaml')
-        reform_parameters_subtree = load_parameter_file(name = 'plf2016', file_path=file_path)
-        parameters.add_child('plf2016', reform_parameters_subtree)
+        file_path = os.path.join(dir_path, "plf2016.yaml")
+        reform_parameters_subtree = load_parameter_file(name="plf2016", file_path=file_path)
+        parameters.add_child("plf2016", reform_parameters_subtree)
         return parameters
+
 
     ...
     ```
@@ -4088,9 +4166,11 @@ Unlike simple formulas, a `DatedVariable` have several functions. We thus need t
   Examples:
   ```python
   simulation = scenario.new_simulation(trace=True)
-  simulation.calculate('irpp', 2014, print_trace=True)
-  simulation.calculate('irpp', 2014, print_trace=True, max_depth=-1)
-  simulation.calculate('irpp', 2014, print_trace=True, max_depth=-1, show_default_values=False)
+  simulation.calculate("irpp", 2014, print_trace=True)
+  simulation.calculate("irpp", 2014, print_trace=True, max_depth=-1)
+  simulation.calculate(
+      "irpp", 2014, print_trace=True, max_depth=-1, show_default_values=False
+  )
   ```
 
 ## 2.1.0 – [diff](https://github.com/openfisca/openfisca-core/compare/2.0.3...2.0.4)
